@@ -19,20 +19,22 @@ public class StoreResourceTest {
 
     @Test
     public void testHasMilk() throws Exception {
-        String result = this.store.hasMilk().get("milk");
+        String result = this.store.hasMilk().get("milk_stock");
         assertEquals(result, "1000");
     }
 
     @Test
     public void testHasEggs() throws Exception {
-        String result = this.store.hasEggs().get("eggs");
+        String result = this.store.hasEggs().get("eggs_stock");
         assertEquals(result, "1000");
     }
 
     @Test
     public void testBuy_0() throws Exception {
-        String result = this.store.buyMilk(Optional.of(0)).get("qty_bought");
-        assertEquals(result, "0");
+        String error = this.store.buyMilk(Optional.of(0)).get("error");
+        String errCode = this.store.buyMilk(Optional.of(0)).get("err_code");
+        assertEquals(error, "1");
+        assertEquals(errCode, "101");
     }
 
     @Test
@@ -55,8 +57,10 @@ public class StoreResourceTest {
 
     @Test
     public void testBuyEggs_0() throws Exception {
-        String result = this.store.buyEggs(Optional.of(0)).get("qty_bought");
-        assertEquals(result, "0");
+        String error = this.store.buyEggs(Optional.of(0)).get("error");
+        String errCode = this.store.buyEggs(Optional.of(0)).get("err_code");
+        assertEquals(error, "1");
+        assertEquals(errCode, "101");
     }
 
     @Test
