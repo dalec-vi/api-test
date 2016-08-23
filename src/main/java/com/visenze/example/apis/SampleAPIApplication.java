@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.visenze.example.apis.resources.HusbandResource;
 import com.visenze.example.apis.resources.StoreResource;
+import com.visenze.example.apis.services.StoreItemService;
 import io.dropwizard.Application;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
@@ -50,7 +51,8 @@ public class SampleAPIApplication extends Application<SampleAPIConfiguration> {
     @Override
     public void run(SampleAPIConfiguration configuration, Environment environment) {
         environment.jersey().register(RolesAllowedDynamicFeature.class);
-        environment.jersey().register(new HusbandResource());
-        environment.jersey().register(new StoreResource());
+        StoreItemService storeItemService = new StoreItemService();
+        environment.jersey().register(new HusbandResource(storeItemService));
+        environment.jersey().register(new StoreResource(storeItemService));
     }
 }
