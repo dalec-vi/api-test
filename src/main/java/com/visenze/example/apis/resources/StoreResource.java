@@ -15,6 +15,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import static com.visenze.example.apis.services.helper.ResponseUtil.paramCheck;
 
 /**
  * Created by dejun on 18/9/15.
@@ -53,12 +56,15 @@ public class StoreResource {
     public Map<String, String> buyMilk(@FormParam("quantity") Optional<Integer> quantity) {
         Map<String, String> purchaseMap = new HashMap<String, String>();
 
-        if (quantity.get() < 0) {
-            ResponseUtil.addErrorState(purchaseMap, true);
-            ResponseUtil.addErrMsg(purchaseMap, 101);
+//        if (quantity.get() < 0) {
+//            ResponseUtil.addErrorState(purchaseMap, true);
+//            ResponseUtil.addErrMsg(purchaseMap, 101);
+//            return purchaseMap;
+//        }
+        boolean validParam = ResponseUtil.paramCheck(quantity.get(), purchaseMap);
+        if(!validParam){
             return purchaseMap;
         }
-
         int qtyBought = storeItemService.buyMilk(quantity.get());
 
         ResponseUtil.addErrorState(purchaseMap, false);
@@ -73,12 +79,15 @@ public class StoreResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Map<String, String> buyEggs(@FormParam("quantity") Optional<Integer> quantity) {
         Map<String, String> purchaseMap = new HashMap<String, String>();
-        if (quantity.get() < 0) {
-            ResponseUtil.addErrorState(purchaseMap, true);
-            ResponseUtil.addErrMsg(purchaseMap, 101);
+//        if (quantity.get() < 0) {
+//            ResponseUtil.addErrorState(purchaseMap, true);
+//            ResponseUtil.addErrMsg(purchaseMap, 101);
+//            return purchaseMap;
+//        }
+        boolean validParam = ResponseUtil.paramCheck(quantity.get(), purchaseMap);
+        if(!validParam){
             return purchaseMap;
         }
-
         int qtyBought = storeItemService.buyEggs(quantity.get());
 
         ResponseUtil.addErrorState(purchaseMap, false);

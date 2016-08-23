@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.visenze.example.apis.filter.ParamRequestFilter;
 import com.visenze.example.apis.resources.HusbandResource;
 import com.visenze.example.apis.resources.StoreResource;
 import com.visenze.example.apis.services.StoreItemService;
@@ -13,6 +14,10 @@ import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
+
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
 
 public class SampleAPIApplication extends Application<SampleAPIConfiguration> {
     public static void main(String[] args) throws Exception {
@@ -51,8 +56,11 @@ public class SampleAPIApplication extends Application<SampleAPIConfiguration> {
     @Override
     public void run(SampleAPIConfiguration configuration, Environment environment) {
         environment.jersey().register(RolesAllowedDynamicFeature.class);
+        environment.servlets().addFilter("TestFilter", new ParamRequestFilter())
+                .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
         StoreItemService storeItemService = new StoreItemService();
         environment.jersey().register(new HusbandResource(storeItemService));
         environment.jersey().register(new StoreResource(storeItemService));
+
     }
 }

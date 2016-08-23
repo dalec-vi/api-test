@@ -31,11 +31,14 @@ public class ResponseUtil {
             case 101:
                 purchaseMap.put("err_msg", "Quantity should be positive");
                 break;
+            case 100:
+                purchaseMap.put("err_msg", "Invalid param");
+                break;
         }
     }
 
-    public static void addPurchaseState(int qty, Map<String, String> purchaseMap){
-        if(qty > 0){
+    public static void addPurchaseState(int qtyBought, Map<String, String> purchaseMap){
+        if(qtyBought > 0){
             purchaseMap.put("status", "1");
         }
         else{
@@ -43,6 +46,15 @@ public class ResponseUtil {
             purchaseMap.put("status_msg", "Insufficient Quantity");
         }
 
-        purchaseMap.put("qty_bought", Integer.toString(qty));
+        purchaseMap.put("qty_bought", Integer.toString(qtyBought));
+    }
+
+    public static boolean paramCheck(int qty, Map<String, String> purchaseMap){
+        if (qty <= 0) {
+            ResponseUtil.addErrorState(purchaseMap, true);
+            ResponseUtil.addErrMsg(purchaseMap, 101);
+            return false;
+        }
+        return true;
     }
 }
